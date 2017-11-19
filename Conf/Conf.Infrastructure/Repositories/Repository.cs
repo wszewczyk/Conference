@@ -3,15 +3,25 @@
 namespace Conf.Infrastructure.Repositories
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore;
 
     public abstract class Repository<T> : IRepository<T>
         where T : class
     {
+        private readonly DbContext _dbContext;
+        private readonly DbSet<T> _set;
+
+        protected Repository(DbContext dbContext)
+        {
+            _dbContext = dbContext;
+            _set = dbContext.Set<T>();
+        }
+
+
         public void Add(T entity)
         {
-            throw new System.NotImplementedException();
+            _set.Add(entity);
         }
 
         public void AddRange(IEnumerable<T> entities)
@@ -21,7 +31,7 @@ namespace Conf.Infrastructure.Repositories
 
         public T Get(int id)
         {
-            return null;
+            return _set.Find(id);
         }
 
         public IEnumerable<T> GetAll()
@@ -52,6 +62,30 @@ namespace Conf.Infrastructure.Repositories
         public void RemoveRange(IEnumerable<T> entities)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    this._dbContext.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }

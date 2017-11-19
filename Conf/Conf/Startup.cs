@@ -4,9 +4,11 @@ using Autofac.Extensions.DependencyInjection;
 using Conf.Application.Services;
 using Conf.Core.Abstract.Repositories;
 using Conf.Core.Abstract.Services;
+using Conf.Database;
 using Conf.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -32,11 +34,14 @@ namespace Conf
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddDbContext<ConfContext>(options =>
+                options.UseSqlServer("Server=.;Database=Conf;Trusted_Connection=True;"));
 
             var builder = new ContainerBuilder();
 
             builder.RegisterType<ConferenceRepository>().As<IConferenceRepository>();
             builder.RegisterType<ConferenceService>().As<IConferenceService>();
+            builder.RegisterType<ConfContext>().As<DbContext>();
 
             builder.Populate(services);
             this.ApplicationContainer = builder.Build();

@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Conf.Application\Conf.Application.csproj" />
     <ProjectReference Include="..\Conf.Core\Conf.Core.csproj" />
+    <ProjectReference Include="..\Conf.Database\Conf.Database.csproj" />
     <ProjectReference Include="..\Conf.Infrastructure\Conf.Infrastructure.csproj" />
   </ItemGroup>
 

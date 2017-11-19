@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Conf.Core.Abstract.Repositories;
 using Conf.Core.Abstract.Services;
+using Conf.Core.Model.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conf.Controllers
@@ -20,7 +21,7 @@ namespace Conf.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] {"value1", "value2"};
         }
 
         [HttpGet("{id}")]
@@ -31,18 +32,25 @@ namespace Conf.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            _conferenceRepository.Dispose();
+            base.Dispose(disposing);
         }
     }
 }
